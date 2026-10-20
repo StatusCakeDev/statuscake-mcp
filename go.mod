@@ -11,7 +11,7 @@ require (
 	github.com/spf13/viper v1.21.0
 	github.com/tomasbasham/cli-runtime v0.0.0-20261001063411-ce582f58a98b
 	github.com/tomasbasham/gofp v0.0.0-20260227012010-4174039de329
-	golang.org/x/time v0.15.0
+	golang.org/x/time v0.16.0
 )
 
 require (
