@@ -1,0 +1,11 @@
+# vi: ft=yaml
+---
+formatter:
+  type: basic
+  include_document_start: true
+  indentless_arrays: true
+  retain_line_breaks_single: true
+  # There is missing functionality in `yamlfmt` to remove redundantly quoted
+  # strings from YAML documents, and prefer the use of double quotes (or
+  # whatever is configured). This means further manual effort is required to
+  # correct files.
