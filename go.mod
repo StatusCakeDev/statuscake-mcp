@@ -3,9 +3,11 @@ module github.com/StatusCakeDev/statuscake-mcp
 go 1.27
 
 require (
+	github.com/StatusCakeDev/statuscake-go v1.3.0
 	github.com/google/go-cmp v0.7.0
 	github.com/modelcontextprotocol/go-sdk v1.8.0
 	github.com/tomasbasham/gofp v0.0.0-20260227012010-4174039de329
+	golang.org/x/time v0.15.0
 )
 
 require (
@@ -16,5 +18,4 @@ require (
 	golang.org/x/oauth2 v0.35.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.41.0 // indirect
-	golang.org/x/time v0.15.0 // indirect
 )
