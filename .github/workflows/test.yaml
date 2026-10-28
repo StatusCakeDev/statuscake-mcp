@@ -1,0 +1,22 @@
+---
+name: test
+on:
+  pull_request_target:
+  push:
+    branches:
+    # Run on merge queue branches for branch protection compatibility.
+    - gh-readonly-queue/**
+    - master
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+        - ubuntu-latest
+        - macos-latest
+    uses: StatusCakeDev/shared-workflows/.github/workflows/test-go.yaml@v1
+    with:
+      runs-on: ${{ matrix.os }}

@@ -1,4 +1,4 @@
-# StatusCake MCP Server
+# StatusCake MCP Server [![test](https://github.com/StatusCakeDev/statuscake-mcp/actions/workflows/test.yaml/badge.svg?event=push)](https://github.com/StatusCakeDev/statuscake-mcp/actions/workflows/test.yaml)
 
 [![Support][support-badge]][support]
 
