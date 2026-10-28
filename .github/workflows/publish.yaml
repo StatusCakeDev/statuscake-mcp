@@ -1,0 +1,19 @@
+---
+name: publish
+on:
+  push:
+    tags:
+    - v*
+permissions:
+  contents: write
+  packages: write
+jobs:
+  goreleaser:
+    uses: StatusCakeDev/shared-workflows/.github/workflows/goreleaser.yaml@v1
+    with:
+      container-registry: docker.io
+      container-username: ${{ vars.DOCKERHUB_USERNAME }}
+    secrets:
+      CONTAINER_PASSWORD: ${{ secrets.DOCKERHUB_TOKEN }}
+      GPG_PRIVATE_KEY: ${{ secrets.ARTEFACT_SIGNING_KEY }}
+      GPG_PASSPHRASE: ${{ secrets.ARTEFACT_SIGNING_KEY_PASSPHRASE }}

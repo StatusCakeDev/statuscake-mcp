@@ -1,0 +1,97 @@
+---
+version: 2
+archives:
+- formats:
+  - tar.gz
+  format_overrides:
+  - goos: windows
+    formats:
+    - zip
+  name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+before:
+  hooks:
+  - go mod download
+builds:
+- binary: "{{ .ProjectName }}"
+  env:
+  # goreleaser does not work with CGO, it could also complicate usage by users
+  # in CI/CD systems where they may be unable to install libraries.
+  - CGO_ENABLED=0
+  flags:
+  - -trimpath
+  ldflags:
+  - -s -w -X {{ .ModulePath }}/internal/cmd.version={{ .Version }} -X {{ .ModulePath }}/internal/cmd.commit={{ .Commit }}
+  goarch:
+  - "386"
+  - amd64
+  - arm
+  - arm64
+  goos:
+  - darwin
+  - freebsd
+  - linux
+  - windows
+  ignore:
+  - goarch: "386"
+    goos: darwin
+  mod_timestamp: "{{ .CommitTimestamp }}"
+changelog:
+  disable: true
+checksum:
+  algorithm: sha256
+  name_template: "{{ .ProjectName }}_{{ .Version }}_SHA256SUMS"
+dockers:
+- image_templates:
+  - statuscake/{{ .ProjectName }}:{{ .Version }}-amd64
+  - "{{ if not .Prerelease }}statuscake/{{ .ProjectName }}:latest-amd64{{ end }}"
+  use: buildx
+  dockerfile: Dockerfile.goreleaser
+  build_flag_templates:
+  - --platform=linux/amd64
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.description=StatusCake MCP server
+  - --label=org.opencontainers.image.url=https://www.statuscake.com
+  - --label=org.opencontainers.image.source=https://github.com/StatusCakeDev/statuscake-mcp
+  - --label=org.opencontainers.image.version={{ .Version }}
+  - --label=org.opencontainers.image.created={{ .Date }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.licenses=MPL-2.0
+- image_templates:
+  - statuscake/{{ .ProjectName }}:{{ .Version }}-arm64
+  - "{{ if not .Prerelease }}statuscake/{{ .ProjectName }}:latest-arm64{{ end }}"
+  use: buildx
+  goarch: arm64
+  dockerfile: Dockerfile.goreleaser
+  build_flag_templates:
+  - --platform=linux/arm64
+  - --label=org.opencontainers.image.title={{ .ProjectName }}
+  - --label=org.opencontainers.image.description=StatusCake MCP server
+  - --label=org.opencontainers.image.url=https://www.statuscake.com
+  - --label=org.opencontainers.image.source=https://github.com/StatusCakeDev/statuscake-mcp
+  - --label=org.opencontainers.image.version={{ .Version }}
+  - --label=org.opencontainers.image.created={{ .Date }}
+  - --label=org.opencontainers.image.revision={{ .FullCommit }}
+  - --label=org.opencontainers.image.licenses=MPL-2.0
+docker_manifests:
+- name_template: statuscake/{{ .ProjectName }}:{{ .Version }}
+  image_templates:
+  - statuscake/{{ .ProjectName }}:{{ .Version }}-amd64
+  - statuscake/{{ .ProjectName }}:{{ .Version }}-arm64
+- name_template: "{{ if not .Prerelease }}statuscake/{{ .ProjectName }}:latest{{ end }}"
+  image_templates:
+  - "{{ if not .Prerelease }}statuscake/{{ .ProjectName }}:latest-amd64{{ end }}"
+  - "{{ if not .Prerelease }}statuscake/{{ .ProjectName }}:latest-arm64{{ end }}"
+release:
+  prerelease: auto
+signs:
+- artifacts: checksum
+  args:
+  # The `batch` flag must be specified to indicate signing should be
+  # non-interactive.
+  - --batch
+  - --local-user
+  - "{{ .Env.GPG_FINGERPRINT }}"
+  - --output
+  - ${signature}
+  - --detach-sign
+  - ${artifact}
