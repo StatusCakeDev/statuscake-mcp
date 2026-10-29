@@ -9,8 +9,13 @@
 - Model Context Protocol: [modelcontextprotocol.io](https://modelcontextprotocol.io)
 - Support: [developers.statuscake.com](https://developers.statuscake.com/guides/mcp/introduction)
 
-This README outlines the details of collaborating on this Go module. A short
-introduction of this module could easily go here.
+A [Model Context Protocol](https://modelcontextprotocol.io) server that lets an
+AI assistant look at your StatusCake monitoring. Ask "what is down?", "when did
+the checkout API last fail?" or "why didn't that alert?" and the assistant reads
+the answer from StatusCake.
+
+The server is read-only. It cannot create, change, pause or delete anything, and
+it never shows the addresses or numbers in a contact group.
 
 ## Prerequisites
 
@@ -31,6 +36,10 @@ go install github.com/StatusCakeDev/statuscake-mcp@latest
 > [!NOTE]
 > Installing from source using `go install` will build from the master branch
 > and won't report version information via `statuscake-mcp --version`.
+
+### Documentation
+
+Full documentation is available on the [developer portal][support].
 
 ## License
 
